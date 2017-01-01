@@ -12,7 +12,6 @@ def lambda_handler(event, context=None):
             except Exception as e:
                 response["message"] = e.message
                 response["errors"] = e.errors
-                
                 # removing request_dump data
                 del response["errors"]["request_dump"]
                 for _k, _v in response["errors"].items():

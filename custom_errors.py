@@ -32,8 +32,10 @@ class AuthError(CustomError):
 class ImproperErrorBundleDump(CustomError):
     MSG_IMPROPER_ERROR_BUNDLE_DUMP = "Insufficient Info! Incorrect number of parameters passed to Error Dump!"
 
+
 class AbstractMiddlewareError(CustomError):
     MSG_ABS_MIDDLEWARE_ERROR = "An abstract middleware can't be processed!"
+
 
 class Resource404(CustomError):
     MSG_404 = "Requested URL was not found on the server!"

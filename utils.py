@@ -1,17 +1,17 @@
 # utils.py
 
-# custom class onyl method decorator which forces a 
-# method to be only callable from a class reference
-# as opposed to an instance of the class
-
 import settings
 
+"""
+# custom class only method decorator which forces a 
+# method to be only callable from a class reference
+# as opposed to an instance of the class
+"""
 class classonlymethod(classmethod):
     def __get__(self, instance, owner):
         if instance is not None:
             raise AttributeError("This method is available only on the class and not an instance.")
         return super(classonlymethod, self).__get__(instance, owner) 
-
 
 
 class RequestOp(object):
@@ -53,5 +53,3 @@ class RequestOp(object):
             request[key] = [value]
         else:
             request[key].append(value)
-
-

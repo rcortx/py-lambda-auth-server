@@ -2,9 +2,9 @@
 
 import abc
 import inspect
+
 from custom_errors import CustomError, AuthError, ImproperErrorBundleDump, AbstractMiddlewareError
 from utils import classonlymethod, RequestOp
-# TODO remove
 from authorizers import Authenticator, SafeMethodOnlyAuthorizer, APIAuthorizer
 from settings import SAFE_CODES, AUTH
 from router import route
@@ -57,21 +57,7 @@ class AuthMiddleWare(object):
         
         cls._instance.process(request, response) # process request object on current layer
         return cls._instance.delegate(request, response)
-        #pass
-
-    def __getattr__(self, name):
-        try:
-            return self.__dict[name]
-        except KeyError:
-            msg = "'{0}' object has no attribute '{1}'"
-            raise AttributeError(msg.format(type(self).__name__, name))
-
-    def __setattr__(self, name, value):
-        #if not hasattr(self, '__dict')
-        #    self.__dict = {}
-        self.__dict[name] = value
         
-
     def authorize(self, request):
         """
         To check if this use is authorized to penetrate the current middleware
@@ -111,6 +97,16 @@ class AuthMiddleWare(object):
         """wrapper method for fetching authorizers"""
         return self.AUTH_CLASSES
 
+    def __getattr__(self, name):
+        try:
+            return self.__dict[name]
+        except KeyError:
+            msg = "'{0}' object has no attribute '{1}'"
+            raise AttributeError(msg.format(type(self).__name__, name))
+
+    def __setattr__(self, name, value):
+        self.__dict[name] = value
+
 
 class StackedAuthMiddleWare(AuthMiddleWare):
     """
@@ -138,8 +134,6 @@ class StackedAuthMiddleWare(AuthMiddleWare):
         return self.STACKED_MIDDLEWARES
 
 
-
-
 class ViewAuthMiddleWare(AuthMiddleWare):
     # @view represents the requested view for which access was denied 
     AUTH_CLASSES =  [SafeMethodOnlyAuthorizer, APIAuthorizer]
@@ -149,6 +143,7 @@ class ViewAuthMiddleWare(AuthMiddleWare):
 
     def delegate(self, request, response):
         return route(request, response)
+
 
 class IdentityAuthMiddleWare(StackedAuthMiddleWare):
     

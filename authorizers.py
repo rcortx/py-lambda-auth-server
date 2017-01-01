@@ -36,6 +36,7 @@ class AbstractAuthorizer(object):
 class SafeMethodOnlyAuthorizer(AbstractAuthorizer):
     ERROR_MSG = "This method is not safe! Only {} are allowed!".format(settings.SAFE_METHODS)
     ERROR_CODE = 10
+    
     def authorize(self, request):
         if RequestOp.getMethod(request) in settings.SAFE_METHODS:
             return [True]
@@ -43,7 +44,9 @@ class SafeMethodOnlyAuthorizer(AbstractAuthorizer):
 
 
 class Authenticator(AbstractAuthorizer):
-    
+    """
+    Authenticates user identity or sign them up if requested
+    """
     ERROR_CODE_METHOD_NOT_ALLOWED = 2
     ERROR_MSG_METHOD_NOT_ALLOWED = "This method is not allowed for authentication! Only" +\
         " %s methods are allowed!"%(settings.AUTH['ALLOWED_METHODS'])
@@ -91,8 +94,8 @@ class Authenticator(AbstractAuthorizer):
             return False
         secret = RequestOp.getPayload(request, settings.AUTH['CREDENTIALS_KEY_SECRET'])
         dbase = db.DBAdapter.get_instance()
-        #print "CRED DETAILS@@@@@ ", user, secret, dbase
-        if dbase.check_value(settings.DB["USERS"], user, {"secret":secret}):# 2: {"primary":user}
+
+        if dbase.check_value(settings.DB["USERS"], user, {"secret":secret}):
             cur_time = calendar.timegm(time.gmtime())
             token = get_token_hash(user, cur_time)
             dbase.set(settings.DB["TOKENS"], {settings.DB["TOKENS"][:-1]:token, settings.AUTH['TOKEN_USER_KEY']: user, 
@@ -104,7 +107,7 @@ class Authenticator(AbstractAuthorizer):
         token = RequestOp.getHeader(request, settings.AUTH['TOKEN_HEADER'])
         if not token: return [self.ERROR_CODE_NO_CREDENTIALS_SUPPLIED]
         dbase = db.DBAdapter.get_instance()
-        fetched = dbase.get(settings.DB["TOKENS"], token)# 2: {"primary":token}
+        fetched = dbase.get(settings.DB["TOKENS"], token)
         if not fetched:
             return [self.ERROR_CODE_NOT_AUTHENTICATED]
         cur_time = calendar.timegm(time.gmtime())

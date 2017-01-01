@@ -13,7 +13,6 @@ NOTE: DEPRECATED UNIT-TESTS: Don't Run!
 class MiddleWareTest(unittest.TestCase):
 
     def test_processRequest_identityAuth(self):
-        
         try:
             user = "U:100"
             secret = "top_secret"
@@ -34,7 +33,6 @@ class MiddleWareTest(unittest.TestCase):
             self.assertEqual(None, None)
 
     def test_processRequest_hiddenViews(self):
-        
         try:
             user = "U:100"
             secret = "top_secret"
@@ -53,7 +51,6 @@ class MiddleWareTest(unittest.TestCase):
         except custom_errors.AuthError as e:
             print e.errors
             self.assertEqual(None, None)
-
 
     def test_processRequest_cyclic(self):
             user = "U:1"
@@ -136,6 +133,7 @@ class DBTest(unittest.TestCase):
         dbase.set(key, value)
         res = dbase.get(key)
         self.assertEqual(value, res)
+
 
 class AuthTest(unittest.TestCase):
     def test_authorizer_errosFormat(self):

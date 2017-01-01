@@ -1,7 +1,11 @@
 # populate_script.py
 import boto3
 
-def respond(err, res=None):
+"""
+For creating new users for tesing purposes
+"""
+
+def respond(err, res=None): # dummy
     return {
         'statusCode': '400' if err else '200',
         'body': err.message if err else json.dumps(res),
@@ -9,7 +13,6 @@ def respond(err, res=None):
             'Content-Type': 'application/json',
         },
     }
-
 
 def lambda_handler(event, context):
         dynamodb = boto3.resource('dynamodb')

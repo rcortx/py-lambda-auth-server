@@ -1,10 +1,10 @@
 # db.py
 import abc
+from boto3.dynamodb.conditions import Key
 import boto3
 
 from utils import classonlymethod
 
-from boto3.dynamodb.conditions import Key
 
 class AbstractDBWrapper(object):
     """
@@ -43,20 +43,27 @@ class AbstractDBWrapper(object):
 
 
 class DynamoDBWrapper(AbstractDBWrapper):
+    """
+    wrapper over dynamodb in AWS
+    """
     models = {
         "users": None,
         "tokens": None,
     }
+    
     def open(self):
         dynamo = boto3.resource('dynamodb')
         self.models["users"] = dynamo.Table('users_test')
         self.models["tokens"] = dynamo.Table('tokens')
+    
     def close(self):
         pass
+    
     def set(self, table, item):
         self.models[table].put_item(
            Item=item
             )
+    
     def get_item_npk(self, table, key, value, index=None):
             if not index:
                 index = key + "-index"
@@ -80,6 +87,9 @@ class DynamoDBWrapper(AbstractDBWrapper):
 
 
 class DummyDBWrapper(AbstractDBWrapper):
+    """
+    **DEPRECATED dummy wrapper for testing purposes
+    """
     _db_sim = {
         "users":{"U:100":"top_secret"},
         "tokens":{
@@ -91,13 +101,16 @@ class DummyDBWrapper(AbstractDBWrapper):
 
     def open(self):
         pass
+    
     def close(self):
         pass
+    
     def get(self, model, key):
         p_key = key["primary"]
         if p_key in self._db_sim[model]:
             return self._db_sim[model][p_key]
         return None 
+    
     def set(self, model, value):
         self._db_sim[model][value["primary"]] = value
 

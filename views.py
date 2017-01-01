@@ -1,7 +1,5 @@
 # views.py
 
-
-
 class DummyView(object):
     std_msg = "This is {}. You have been succesfully authenticated and authorized!"
     
