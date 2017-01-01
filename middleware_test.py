@@ -5,8 +5,9 @@ import db
 import authorizers
 import token_hash
 import settings
-
-
+"""
+TODO update test version
+"""
 class MiddleWareTest(unittest.TestCase):
 
     def test_processRequest_identityAuth(self):
