@@ -6,9 +6,6 @@ import authorizers
 import token_hash
 import settings
 
-"""
-NOTE: DEPRECATED UNIT-TESTS: Don't Run!
-"""
 
 class MiddleWareTest(unittest.TestCase):
 
