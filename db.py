@@ -86,35 +86,6 @@ class DynamoDBWrapper(AbstractDBWrapper):
         return True
 
 
-class DummyDBWrapper(AbstractDBWrapper):
-    """
-    **DEPRECATED dummy wrapper for testing purposes
-    """
-    _db_sim = {
-        "users":{"U:100":"top_secret"},
-        "tokens":{
-            "U:100":{
-                "user":"U:100",
-                "time":1483189400,
-                }
-        }} # test user and secret
-
-    def open(self):
-        pass
-    
-    def close(self):
-        pass
-    
-    def get(self, model, key):
-        p_key = key["primary"]
-        if p_key in self._db_sim[model]:
-            return self._db_sim[model][p_key]
-        return None 
-    
-    def set(self, model, value):
-        self._db_sim[model][value["primary"]] = value
-
-
 class DBAdapter(object):
     _instance = None # static instance of class
     
@@ -154,6 +125,35 @@ class DBAdapter(object):
 
     def check_value(self, model, key, expected):
         return self.db.check_v(model, key, expected)
+
+
+class DummyDBWrapper(AbstractDBWrapper):
+    """
+    **DEPRECATED dummy wrapper for testing purposes
+    """
+    _db_sim = {
+        "users":{"U:100":"top_secret"},
+        "tokens":{
+            "U:100":{
+                "user":"U:100",
+                "time":1483189400,
+                }
+        }} # test user and secret
+
+    def open(self):
+        pass
+    
+    def close(self):
+        pass
+    
+    def get(self, model, key):
+        p_key = key["primary"]
+        if p_key in self._db_sim[model]:
+            return self._db_sim[model][p_key]
+        return None 
+    
+    def set(self, model, value):
+        self._db_sim[model][value["primary"]] = value
 
 
 def test(): # ignore this

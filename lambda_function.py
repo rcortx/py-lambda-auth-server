@@ -6,6 +6,10 @@ import middleware
 import settings
 
 def lambda_handler(event, context=None):
+            """
+            As all exceptions are delegated to the top layer, this function will handle them
+                albiet, crudely for now with more information leak for testing purposes
+            """
             response = {}
             try:
                 response = middleware.IdentityAuthMiddleWare.process_request(event, response)

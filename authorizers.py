@@ -32,7 +32,6 @@ class AbstractAuthorizer(object):
         self.__dict[name] = value
 
 
-
 class SafeMethodOnlyAuthorizer(AbstractAuthorizer):
     ERROR_MSG = "This method is not safe! Only {} are allowed!".format(settings.SAFE_METHODS)
     ERROR_CODE = 10
