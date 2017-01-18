@@ -6,7 +6,8 @@ py-lambda-auth-server
 
 Here's a brief on the architecture:  
 
-layer(s) of middlewares process the request before it reaches the view layer. 
+Layer(s) of middlewares process the request before it reaches the view layer. 
+
 The middlewares are responsible for preprocessing, authorization and delegation to subsequent layers which may be more middlewares or a ROUTER, which will route requests to an appropriate VIEW.
 
 A strict decoupling has been employed between Authorizers and Middleware where the latter aggregates the former for usage in authentication and authorization.
